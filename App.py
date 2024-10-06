@@ -63,6 +63,12 @@ elif authentication_status == None:
 # Esconde o botão de logout
 authenticator.logout("Logout", "sidebar")
 
+if authentication_status:
+    st.write(f"Bem-vindo, {name}!")
+    
+    # Seu código do aplicativo aqui (indentado)
+    st.title('Formulário de Avaliação de Jogadores'
+
 # Caching the position groups to avoid redefinition
 @st.cache_data
 def agrupar_posicoes_em_portugues():
