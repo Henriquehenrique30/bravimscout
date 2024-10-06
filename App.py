@@ -18,7 +18,7 @@ def hash_password(password):
 
 # Função para verificar a senha
 def check_password(plain_text_password, hashed_password):
-    return bcrypt.checkpw(plain_text_password.encode(), hashed_password.encode())   
+    return bcrypt.checkpw(plain_text_password.encode(), hashed_password.encode())
 
 
 # Função para enviar email
