@@ -18,7 +18,7 @@ def hash_password(password):
 
 # Função para verificar a senha
 def check_password(plain_text_password, hashed_password):
-    return bcrypt.checkpw(plain_text_password.encode(), hashed_password.encode())
+    return bcrypt.checkpw(plain_text_password.encode(), hashed_password.encode())   
 
 
 # Função para enviar email
@@ -52,82 +52,70 @@ authenticator = stauth.Authenticate(
 name, authentication_status, username = authenticator.login("Login", "main")
 
 if authentication_status:
-    # ... (seu código do aplicativo)
-
-elif authentication_status == False:
-    st.error("Usuário ou senha incorretos")
-
-elif authentication_status == None:
-    # ... (código para criar nova conta)
-
-# Esconde o botão de logout
-authenticator.logout("Logout", "sidebar")
-
-if authentication_status:
     st.write(f"Bem-vindo, {name}!")
-    
-    # Seu código do aplicativo aqui (indentado)
-    st.title('Formulário de Avaliação de Jogadores'
 
-# Caching the position groups to avoid redefinition
-@st.cache_data
-def agrupar_posicoes_em_portugues():
-    return {
-        'Goleiros': ['GK'],
-        'Laterais Direitos': ['RD'],
-        'Laterais Esquerdos': ['LD'],
-        'Zagueiros': ['CD', 'LCD', 'RCD'],
-        'Volantes/Meio defensivos': ['CDM', 'RCDM', 'LCDM', 'LDM', 'RDM'],
-        'Segundos Volantes': ['RCM', 'LCM'],
-        'Meio-Atacantes': ['CAM'],
-        'Extremos/Pontas': list(set(['LM', 'RM', 'LCF', 'RCF', 'LAM', 'RAM'])),
-        'Atacantes': ['CF']
-    }
+    # Seu código do aplicativo aqui
+    st.title('Formulário de Avaliação de Jogadores')
 
-def calcular_pontuacao(df, posicoes, tier1_cols, tier2_cols, tier3_cols, tier_weights, min_minutos, max_minutos, max_idade):
-    df['Age'] = pd.to_numeric(df['Age'], errors='coerce')
-    df_filtered = df[
-        df['Position'].isin(posicoes) & 
-        (df['Minutes played'] >= min_minutos) &
-        (df['Minutes played'] <= max_minutos) &
-        (df['Age'] <= max_idade)
-    ].copy()
+    # Caching the position groups to avoid redefinition
+    @st.cache_data
+    def agrupar_posicoes_em_portugues():
+        return {
+            'Goleiros': ['GK'],
+            'Laterais Direitos': ['RD'],
+            'Laterais Esquerdos': ['LD'],
+            'Zagueiros': ['CD', 'LCD', 'RCD'],
+            'Volantes/Meio defensivos': ['CDM', 'RCDM', 'LCDM', 'LDM', 'RDM'],
+            'Segundos Volantes': ['RCM', 'LCM'],
+            'Meio-Atacantes': ['CAM'],
+            'Extremos/Pontas': list(set(['LM', 'RM', 'LCF', 'RCF', 'LAM', 'RAM'])),
+            'Atacantes': ['CF']
+        }
 
-    if df_filtered.empty:
-        st.warning("Nenhum jogador encontrado para as condições especificadas.")
-        return pd.DataFrame()
+    def calcular_pontuacao(df, posicoes, tier1_cols, tier2_cols, tier3_cols, tier_weights, min_minutos, max_minutos, max_idade):
+        df['Age'] = pd.to_numeric(df['Age'], errors='coerce')
+        df_filtered = df[
+            df['Position'].isin(posicoes) & 
+            (df['Minutes played'] >= min_minutos) &
+            (df['Minutes played'] <= max_minutos) &
+            (df['Age'] <= max_idade)
+        ].copy()
 
-    required_metrics = tier1_cols + tier2_cols + tier3_cols
-    missing_cols = [col for col in required_metrics if col not in df_filtered.columns]
-    if missing_cols:
-        st.error(f"As seguintes métricas estão faltando no arquivo: {missing_cols}")
-        return pd.DataFrame()
+        if df_filtered.empty:
+            st.warning("Nenhum jogador encontrado para as condições especificadas.")
+            return pd.DataFrame()
 
-    # Replace and convert columns
-    for col in required_metrics:
-        df_filtered[col] = df_filtered[col].astype(str).str.replace('-', '0').str.replace('%', '')
-        df_filtered[col] = pd.to_numeric(df_filtered[col], errors='coerce').fillna(0)
+        required_metrics = tier1_cols + tier2_cols + tier3_cols
+        missing_cols = [col for col in required_metrics if col not in df_filtered.columns]
+        if missing_cols:
+            st.error(f"As seguintes métricas estão faltando no arquivo: {missing_cols}")
+            return pd.DataFrame()
 
-    # Normalize using Min-Max Scaler
-    scaler = MinMaxScaler(feature_range=(0, 10))
-    df_filtered[[col + '_norm' for col in required_metrics]] = scaler.fit_transform(df_filtered[required_metrics])
+        # Replace and convert columns
+        for col in required_metrics:
+            df_filtered[col] = df_filtered[col].astype(str).str.replace('-', '0').str.replace('%', '')
+            df_filtered[col] = pd.to_numeric(df_filtered[col], errors='coerce').fillna(0)
 
-    # Calculate tier scores
-    df_filtered['Tier 1'] = df_filtered[[col + '_norm' for col in tier1_cols]].mean(axis=1)
-    df_filtered['Tier 2'] = df_filtered[[col + '_norm' for col in tier2_cols]].mean(axis=1)
-    df_filtered['Tier 3'] = df_filtered[[col + '_norm' for col in tier3_cols]].mean(axis=1)
+        # Normalize using Min-Max Scaler
+        scaler = MinMaxScaler(feature_range=(0, 10))
+        df_filtered[[col + '_norm' for col in required_metrics]] = scaler.fit_transform(df_filtered[required_metrics])
 
-    # Final Score
-    df_filtered['Pontuação Final'] = (
-        tier_weights['Tier 1'] * df_filtered['Tier 1'] +
-        tier_weights['Tier 2'] * df_filtered['Tier 2'] +
-        tier_weights['Tier 3'] * df_filtered['Tier 3']
-    )
+        # Calculate tier scores
+        df_filtered['Tier 1'] = df_filtered[[col + '_norm' for col in tier1_cols]].mean(axis=1)
+        df_filtered['Tier 2'] = df_filtered[[col + '_norm' for col in tier2_cols]].mean(axis=1)
+        df_filtered['Tier 3'] = df_filtered[[col + '_norm' for col in tier3_cols]].mean(axis=1)
 
-    # Impact per Minute
-    df_filtered['Impacto por Minuto'] = (df_filtered['Pontuação Final'] / df_filtered['Minutes played']) * 1000
+        # Final Score
+        df_filtered['Pontuação Final'] = (
+            tier_weights['Tier 1'] * df_filtered['Tier 1'] +
+            tier_weights['Tier 2'] * df_filtered['Tier 2'] +
+            tier_weights['Tier 3'] * df_filtered['Tier 3']
+        )
 
-    return df_filtered
+        # Impact per Minute
+        df_filtered['Impacto por Minuto'] = (df_filtered['Pontuação Final'] / df_filtered['Minutes played']) * 1000
+
+        return df_filtered
 
 def definir_tiers_por_grupo(grupo_escolhido):
     tiers = {
