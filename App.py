@@ -1,13 +1,13 @@
-import streamlit as st
-import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
-import matplotlib.pyplot as plt
-import streamlit_authenticator as stauth
+import os
 import bcrypt
 import smtplib
-from email.mime.text import MIMEText
+import streamlit as st
+import pandas as pd
+import streamlit_authenticator as stauth
 from dotenv import load_dotenv
-import os
+from email.mime.text import MIMEText
+from sklearn.preprocessing import MinMaxScaler
+import matplotlib.pyplot as plt
 
 # Carrega as variáveis de ambiente
 load_dotenv()
@@ -18,7 +18,8 @@ def hash_password(password):
 
 # Função para verificar a senha
 def check_password(plain_text_password, hashed_password):
-    return bcrypt.checkpw(plain_text_password.encode(), hashed_password.encode())
+    return bcrypt.checkpw(plain_text_password.encode(), hashed_password.encode())   
+
 
 # Função para enviar email
 def send_email(to_email, password):
@@ -34,7 +35,7 @@ def send_email(to_email, password):
 # Nomes de usuário, senhas e e-mails
 names = ["Fulano de Tal", "Ciclano"]
 usernames = ["fulano", "ciclano"]
-passwords = [hash_password("senha123"), hash_password("outrasenha")]
+passwords = [hash_password("senha123"), hash_password("outrasenha")]  # Lista de strings
 emails = ["fulano@email.com", "ciclano@email.com"]
 
 # Cria o autenticador
