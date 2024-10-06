@@ -35,7 +35,7 @@ def send_email(to_email, password):
 # Nomes de usuário, senhas e e-mails
 names = ["Fulano de Tal", "Ciclano"]
 usernames = ["fulano", "ciclano"]
-passwords = [hash_password("senha123"), hash_password("outrasenha")]  # Lista de strings
+passwords = [hash_password("senha123"), hash_password("outrasenha")]
 emails = ["fulano@email.com", "ciclano@email.com"]
 
 # Cria o autenticador
@@ -52,9 +52,16 @@ authenticator = stauth.Authenticate(
 name, authentication_status, username = authenticator.login("Login", "main")
 
 if authentication_status:
-    st.write(f"Bem-vindo, {name}!")
-    # Seu código do aplicativo aqui
-    st.title('Formulário de Avaliação de Jogadores')
+    # ... (seu código do aplicativo)
+
+elif authentication_status == False:
+    st.error("Usuário ou senha incorretos")
+
+elif authentication_status == None:
+    # ... (código para criar nova conta)
+
+# Esconde o botão de logout
+authenticator.logout("Logout", "sidebar")
 
 # Caching the position groups to avoid redefinition
 @st.cache_data
