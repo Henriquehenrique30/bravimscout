@@ -4,10 +4,3 @@ scikit-learn>=1.2.0
 matplotlib>=3.5.0
 openpyxl>=3.0.0
 numpy>=1.21.0
-streamlit
-streamlit_authenticator
-bcrypt
-python-dotenv
-matplotlib
-pandas
-scikit-learn
