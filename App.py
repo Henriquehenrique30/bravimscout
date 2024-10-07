@@ -12,7 +12,7 @@ def agrupar_posicoes_em_portugues():
         'Laterais Esquerdos': ['LD'],
         'Zagueiros': ['CD', 'LCD', 'RCD'],
         'Volantes/Meio defensivos': ['CDM', 'RCDM', 'LCDM', 'LDM', 'RDM'],
-        'Segundos Volantes': ['RCM', 'LCM'],
+        'Meio Central': ['RCM', 'LCM'],
         'Meio-Atacantes': ['CAM'],
         'Extremos/Pontas': list(set(['LM', 'RM', 'LCF', 'RCF', 'LAM', 'RAM'])),
         'Atacantes': ['CF']
@@ -103,7 +103,7 @@ def definir_tiers_por_grupo(grupo_escolhido):
         'Extremos/Pontas': (
             ['Final third entries', 'Final third entries through carry', 'Crosses', 'Crosses accurate', 'Dribbles', 'Dribbles successful, %','Goals'],
             ['Chances', 'Chances successful', 'Chances successful, %', 'Shots', 'Shots on target', 'Key passes', 'Key passes accurate', 'Passes into the penalty box', 'Passes into the penalty box accurate'],
-            ['Challenges', 'Challenges won, %', 'Defensive challenges', 'Defensive challenges won, %', 'Attacking challenges', 'Attacking challenges won, %', 'Tackles', 'Tackles successful', 'Interceptions', 'Crosses', 'Crosses accurate']
+            ['Challenges', 'Challenges won, %', 'Defensive challenges', 'Defensive challenges won, %', 'Attacking challenges', 'Attacking challenges won, %', 'Tackles', 'Tackles successful', 'Interceptions']
         ),
         'Atacantes': (
             ['Goals', 'xG', 'Shots on target', 'Shots on target, %', 'Final third entries', 'Final third entries through carry'],
