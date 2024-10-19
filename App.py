@@ -85,7 +85,7 @@ def definir_tiers_por_grupo(grupo_escolhido):
             ['Tackles', 'Tackles successful', 'Interceptions', 'Passes accurate, %', 'Passes'],
             ['Challenges', 'Challenges won', 'Progressive passes', 'Progressive passes accurate', 'Crosses', 'Crosses accurate','Goals']
         ),
-        'Segundos Volantes': (
+        'Meio Central': (
             ['Defensive challenges', 'Defensive challenges won, %', 'Interceptions','Passes', 'Passes accurate, %', 'Progressive passes', 'Progressive passes accurate'],
             ['Tackles', 'Tackles successful', 'Crosses', 'Crosses accurate', 'Picking up', 'Key passes', 'Key passes accurate'],
             ['Challenges', 'Challenges won, %', 'Long passes', 'Long passes accurate', 'Attacking challenges', 'Attacking challenges won, %', 'Final third entries', 'Final third entries through carry', 'Shots', 'Shots on target', 'Goals']
